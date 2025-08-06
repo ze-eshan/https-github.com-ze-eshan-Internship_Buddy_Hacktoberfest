@@ -1,4 +1,4 @@
-# This Repo is template in nextjs with some 
+# This Repo is template in nextjs with some 👇
 - Lucid react icons 
 - shadcn ui 
 - firebase 
