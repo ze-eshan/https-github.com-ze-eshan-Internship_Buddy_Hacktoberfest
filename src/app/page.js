@@ -1,9 +1,15 @@
-import Image from "next/image";
+import { HeroSection } from '@/components/HeroSection';
+import { FeatureSection } from '@/components/FeatureSection';
+import { ArchitectureSection } from '@/components/ArchitectureSection';
+import { TechStackSection } from '@/components/TechStackSection';
 
 export default function Home() {
   return (
-   <main>
-    <h1 className=" text-center text-3xl">Hello World </h1>
-   </main>
+    <div className="container mx-auto px-4 py-8">
+      <HeroSection />
+      <FeatureSection />
+      <TechStackSection />
+      <ArchitectureSection />
+    </div>
   );
 }

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import ReduxProvider from "@/components/ReduxProvider";
 import NavBar from "@/components/Navbar";
+import { Footer } from "react-day-picker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +28,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          <NavBar/>
-          {children}</ReduxProvider>
-
+          <NavBar />
+          <div className="pt-20">
+            {children}
+          </div>
+          <Footer/>
+        </ReduxProvider>
         <Toaster />
       </body>
     </html>

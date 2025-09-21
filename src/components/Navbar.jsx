@@ -89,7 +89,7 @@ const NavBar = () => {
           <div className="flex-shrink-0">
             <Link
               href="/"
-              className="text-xl flex items-center font-bold text-theme-purple"
+              className="text-xl flex items-center font-bold text-theme-primary"
             >
               <div className="flex items-center gap-2">
                 {/* <motion.span
@@ -115,7 +115,7 @@ const NavBar = () => {
                   href={link.href}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     isActive(link.href)
-                      ? "text-white bg-theme-purple shadow-md hover:shadow-lg"
+                      ? "text-white bg-theme-primary shadow-md hover:shadow-lg"
                       : "text-gray-600  hover:bg-gray-100 "
                   }`}
                 >
@@ -143,7 +143,7 @@ const NavBar = () => {
             {!user ? (
               <CustomBtn
                 onClick={handleLogin}
-                className="flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white bg-theme-purple hover:shadow-lg transition-all duration-300 mt-2"
+                className="flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white bg-theme-primary hover:shadow-lg transition-all duration-300 mt-2"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Login</span>
@@ -169,7 +169,7 @@ const NavBar = () => {
             {!user ? (
               <Link
                 href="/login"
-                className="cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white bg-theme-purple hover:shadow-lg transition-all duration-300 mt-2"
+                className="cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white text-theme-primary hover:shadow-lg transition-all duration-300 mt-2"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Login</span>
@@ -206,7 +206,7 @@ const NavBar = () => {
               href={link.href}
               className={`block px-4 py-2 rounded-full text-base font-medium transition-all duration-300 ${
                 isActive(link.href)
-                  ? "text-white bg-theme-purple shadow-md"
+                  ? "text-white text-theme-primary shadow-md"
                   : "text-gray-600  hover:bg-gray-100 "
               }`}
             >
