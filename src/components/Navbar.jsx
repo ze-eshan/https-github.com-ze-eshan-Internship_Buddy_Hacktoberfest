@@ -98,10 +98,10 @@ const NavBar = () => {
                   transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
                   className="text-transparent bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-3xl"
                 > */}
-                
-                <h1 className="text-xl md:text-2xl font-bold ">
+                <img src="/logo.png" className="w-10 h-10"/>
+                {/* <h1 className="text-xl md:text-2xl font-bold ">
                   Your Logo
-                </h1>
+                </h1> */}
               </div>
             </Link>
           </div>
@@ -169,7 +169,7 @@ const NavBar = () => {
             {!user ? (
               <Link
                 href="/login"
-                className="cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white text-theme-primary hover:shadow-lg transition-all duration-300 mt-2"
+                className="cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium text-white bg-theme-primary hover:shadow-lg transition-all duration-300 mt-2"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Login</span>
@@ -206,7 +206,7 @@ const NavBar = () => {
               href={link.href}
               className={`block px-4 py-2 rounded-full text-base font-medium transition-all duration-300 ${
                 isActive(link.href)
-                  ? "text-white text-theme-primary shadow-md"
+                  ? "text-white bg-theme-primary shadow-md"
                   : "text-gray-600  hover:bg-gray-100 "
               }`}
             >
