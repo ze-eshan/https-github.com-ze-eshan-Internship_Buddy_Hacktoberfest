@@ -151,7 +151,7 @@ const DashboardLayout = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <div className="md:ml-68 p-2">
+      <div className="md:ml-68 pt-16">
         {/* Top Navigation */}
         <DashNav toggleMenu={toggleMenu} />
 
