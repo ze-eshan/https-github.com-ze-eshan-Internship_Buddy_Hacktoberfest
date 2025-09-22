@@ -17,7 +17,7 @@ import { auth } from "@/firebase/config";
 
 const UserDropdown = ({ user }) => {
   const { displayName, email, uid, photoURL } = user;
-  const [imgSrc, setImgSrc] = useState(photoURL ?? "./../images/user-img.jpg");
+  const [imgSrc, setImgSrc] = useState(photoURL ?? "./profile.png");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ const UserDropdown = ({ user }) => {
             alt="Profile"
             width={32}
             height={32}
-            onError={() => setImgSrc("./images/user-img.jpg")}
+            onError={() => setImgSrc("/profile.png")}
             className="rounded-full border border-gray-200"
           />
           <span className="text-sm font-medium text-gray-700">

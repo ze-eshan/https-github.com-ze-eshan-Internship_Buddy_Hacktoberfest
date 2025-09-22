@@ -57,7 +57,7 @@ export function DynamicBreadcrumb() {
 
  return (
   <Breadcrumb>
-    <BreadcrumbList className={`px-4 md:px-6 bg-gray-100 py-4 md:py-6`}>
+    <BreadcrumbList className={`px-4 md:px-6 bg-gray-100 py-2 md:py-4`}>
       {/* Home link
       <BreadcrumbItem>
         <BreadcrumbLink href="/">Home</BreadcrumbLink>

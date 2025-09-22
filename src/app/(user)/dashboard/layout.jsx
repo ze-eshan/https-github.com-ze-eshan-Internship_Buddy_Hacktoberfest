@@ -157,7 +157,9 @@ const DashboardLayout = ({ children }) => {
 
         {/* Main Content Area */}
         <DynamicBreadcrumb/>
-        {children}
+        <div className="p-2">
+          {children}
+        </div>
       </div>
     </div>
   );
