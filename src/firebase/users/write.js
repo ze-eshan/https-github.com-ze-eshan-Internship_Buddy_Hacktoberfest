@@ -24,9 +24,6 @@ export const insertUserResume = async ({ uid, data }) => {
       resume: data,
       createdAt: Timestamp.now(),
     },
-    {
-      merge: true,
-    }
   );
 };
 
