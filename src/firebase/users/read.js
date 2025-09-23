@@ -9,6 +9,14 @@ export const getResume = async ({ uid }) => {
     return null;
   }
 };
+export const getResumeEmbedding = async ({ uid }) => {
+  const res = await getDoc(doc(db, `users/${uid}`));
+  if (await res.exists()) {
+    return res.data()?.embedding;
+  } else {
+    return null;
+  }
+};
 
 
 export const getResumeReview = async ({uid})=>{

@@ -1,16 +1,58 @@
-'use client';
+"use client"
+import { Loader2 } from 'lucide-react';
 
-import React from 'react';
-
-const CircularLoader = () => {
+export default function Loading() {
   return (
-    <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
-      <div className="relative w-16 h-16">
-        <div className="absolute inset-0 border-4 border-gray-300 dark:border-gray-600 rounded-full animate-spin border-t-theme-primary dark:border-t-theme-primary"></div>
-        <div className="absolute inset-2 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      <div className="relative">
+        {/* Outer rotating circle */}
+        <div className="absolute inset-0 border-2 border-purple-200 rounded-full animate-ping-slow"></div>
+        
+        {/* Main loader with gradient */}
+        <div className="relative flex items-center justify-center w-24 h-24">
+          <Loader2 className="w-12 h-12 text-theme-primary animate-spin" />
+        </div>
       </div>
+      
+      {/* Text content with fade animation */}
+      <div className="mt-8 text-center space-y-2">
+        <h2 className="text-xl font-semibold text-slate-700 animate-pulse">
+          Loading
+        </h2>
+        <p className="text-slate-500 font-medium animate-fade-in-out">
+          Loading...
+        </p>
+      </div>
+      
+      {/* Progress indicator */}
+      <div className="mt-8 w-48 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+        <div className="h-full bg-theme-primary rounded-full animate-progress"></div>
+      </div>
+      
+      <style jsx>{`
+        @keyframes ping-slow {
+          0% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(1.5); opacity: 0; }
+        }
+        @keyframes fade-in-out {
+          0% { opacity: 0.5; }
+          50% { opacity: 1; }
+          100% { opacity: 0.5; }
+        }
+        @keyframes progress {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-ping-slow {
+          animation: ping-slow 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .animate-fade-in-out {
+          animation: fade-in-out 1.5s ease-in-out infinite;
+        }
+        .animate-progress {
+          animation: progress 1.5s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
-};
-
-export default CircularLoader;
+}

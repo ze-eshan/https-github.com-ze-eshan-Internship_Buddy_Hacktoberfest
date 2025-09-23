@@ -14,7 +14,7 @@ export const createUser = async ({ uid, user }) => {
   );
 };
 
-export const insertUserResume = async ({ uid, data }) => {
+export const insertUserResume = async ({ uid, data,embedding }) => {
   if (!data) {
     throw new Error("No Data for Insert in DB {insertUserResume}fn");
   }
@@ -22,6 +22,7 @@ export const insertUserResume = async ({ uid, data }) => {
     doc(db, `users/${uid}`),
     {
       resume: data,
+      embedding,
       createdAt: Timestamp.now(),
     },
   );

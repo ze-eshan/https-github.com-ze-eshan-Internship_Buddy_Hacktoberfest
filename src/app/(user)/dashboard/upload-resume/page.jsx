@@ -51,15 +51,14 @@ export default function ResumeUploader() {
 
     setIsLoading(true);
     setStatus("Processing...");
+
     try {
       const response = await fetch(
         "https://forge-ai-api.vercel.app/api/resumetext",
         {
           method: "POST",
           body: formData,
-          headers: {
-            Accept: "application/json",
-          },
+          headers: { Accept: "application/json" },
         }
       );
 
@@ -69,31 +68,61 @@ export default function ResumeUploader() {
 
       const result = await response.json();
       setStatus("Resume Extracted successfully");
-      let textResume = JSON.stringify(result.text);
-      console.log(textResume);
+        console.log(result.text)
+      let textResume = result.text;
 
       try {
         setStatus("Generating Digital Profile...");
-        // const resumeRes = await fetch("./api/forge-resume", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     resumeText: textResume,
-        //   }),
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // });
-        // const userResume = await resumeRes.json();
-        const userResume = await generateDigitalResume(textResume);
-        console.log(userResume);
-        console.log(typeof userResume);
-        await insertUserResume({ uid: user?.uid, data: userResume });
+        let userResume = await generateDigitalResume(textResume);
+        if (typeof userResume === "string") {
+          userResume = JSON.parse(userResume);
+        }
+
+        console.log("User Resume:", userResume);
+
+        setStatus("Generating embeddings...");
+
+        if (!process.env.NEXT_PUBLIC_EMBEDING_MODEL_URL) {
+          throw new Error("Embedding model URL not configured.");
+        }
+
+        const embedding_res = await fetch(
+          process.env.NEXT_PUBLIC_EMBEDING_MODEL_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ text: JSON.stringify(userResume) }),
+          }
+        );
+
+        if (!embedding_res.ok) {
+          throw new Error(
+            `Failed to generate embeddings: ${embedding_res.status} ${embedding_res.statusText}`
+          );
+        }
+
+        const embeddingData = await embedding_res.json();
+        console.log("✅ Embedding Data:", embeddingData);
+
+        await insertUserResume({
+          uid: user?.uid,
+          data: userResume,
+          embedding: embeddingData.embedding,
+        });
+
         toast.success("User Profile Generated Successfully");
         setStatus("Generated Successfully ✅ , please check in User Profile");
       } catch (error) {
-        setError(`error::${error?.message}`);
+        console.error("Resume processing error:", error);
+        setError(
+          "Something went wrong while generating your profile. Please try again."
+        );
       }
     } catch (err) {
+      console.error("Upload error:", err);
       setError("Error uploading resume. Please try again.");
     } finally {
       setIsLoading(false);
@@ -141,9 +170,8 @@ export default function ResumeUploader() {
           onClick={handleUpload}
           className="mt-4 w-full cursor-pointer bg-theme-primary hover:bg-theme-primary/[0.7] text-white py-2 rounded-lg "
         >
-          {isLoading?<Loader className="animate-spin"/>:<UploadCloud/>}
-          {isLoading?status:"Upload Resume"}
-          
+          {isLoading ? <Loader className="animate-spin" /> : <UploadCloud />}
+          {isLoading ? status : "Upload Resume"}
         </Button>
       </div>
       {error && (

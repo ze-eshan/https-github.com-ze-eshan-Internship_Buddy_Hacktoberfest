@@ -8,6 +8,7 @@ import { Loader, Settings, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { generateDigitalInternship } from "@/model/intershipExtractorModel";
 import { insertInternship } from "@/firebase/internship/write";
+
 // import { Button } from "../ui/button";
 
 export default function ResumeUploader() {
@@ -40,20 +41,22 @@ export default function ResumeUploader() {
     setError(null);
     setResume(file);
   };
-
   const handleUpload = async () => {
     if (!resume) {
-      setError("Please upload a internship doc.");
+      setError("Please upload an internship doc.");
       return;
     }
+
     setError(null);
-
-    const formData = new FormData();
-    formData.append("resume", resume);
-
     setIsLoading(true);
-    setStatus("Processing...");
+
     try {
+      setStatus("Processing internship document...");
+
+      // Step 1: Upload resume to extract text
+      const formData = new FormData();
+      formData.append("resume", resume);
+
       const response = await fetch(
         "https://forge-ai-api.vercel.app/api/resumetext",
         {
@@ -70,56 +73,84 @@ export default function ResumeUploader() {
       }
 
       const result = await response.json();
-      setStatus("Internship Extracted successfully");
-      let textInternship = JSON.stringify(result.text);
-      console.log(textInternship);
+      setStatus("Internship text extracted successfully");
+      const textInternship = JSON.stringify(result.text);
+      console.log("📄 Extracted Internship Text:", textInternship);
 
-      try {
-        setStatus("Generating Embedings ...")
-        const reqData = {
-          text: textInternship,
-        };
+   
+      
 
-        const embedding_res = await fetch(
-          process.env.NEXT_PUBLIC_EMBEDING_MODEL_URL,
-          {
-            method: "POST",
-            body: JSON.stringify(reqData),
-            headers: {
-              "Content-Type": "application/json", // ❌ MISSING: This is crucial!
-              Accept: "application/json",
-            },
-          }
-        );
+      // Step 3: Generate digital internship JSON
+      setStatus("Generating digital internship...");
+      const digitalInternshipStr = await generateDigitalInternship(
+        textInternship
+      );
+      const internshipData = JSON.parse(digitalInternshipStr);
+      console.log("📝 Digital Internship Data:", internshipData);
 
-        // ❌ BUG: You're checking 'response' but it's 'embedding_res'
-        if (!embedding_res.ok) {
-          throw new Error(
-            `Failed to Generate Embedding: ${embedding_res.status} ${embedding_res.statusText}`
-          );
-        }
-
-        // ❌ BUG: Logging raw Response object - you need to parse JSON
-        const embeddingData = await embedding_res.json();
-
-        console.log("✅ CLEAN JSON Object:", embeddingData);
-        console.log("📝 Text:", embeddingData.text);
-        console.log("📏 Dimension:", embeddingData.dimension);
-        console.log("🔢 First 5 values:", embeddingData.embedding);
-        // const embedings = await embeidng_res.json()
-        // console.log(embedings)
-        setStatus("Generating Digital intership...");
-        const digitalInternship = await generateDigitalInternship(textInternship);
-        const internshipData = JSON.parse(digitalInternship)
-        console.log(JSON.parse(digitalInternship));
-        await insertInternship({internshipData:internshipData})
-        toast.success("internship data updated sucessfully");
-        setStatus("Generated Successfully ✅");
-      } catch (error) {
-        setError(`error::${error?.message}`);
+      // Step 4: Insert internship into Firestore
+      const fb_res = await insertInternship({ internshipData });
+      if (!fb_res?.msg) {
+        throw new Error("Error inserting data in Firebase");
       }
-    } catch (err) {
-      setError("Error uploading resume. Please try again.");
+      console.log("🆔 Firebase Internship ID:", fb_res.id);
+
+
+
+      setStatus("Generating embeddings...");
+      const embeddingReqData = { text: JSON.stringify(internshipData) };
+
+      const embedding_res = await fetch(
+        process.env.NEXT_PUBLIC_EMBEDING_MODEL_URL,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(embeddingReqData),
+        }
+      );
+
+      if (!embedding_res.ok) {
+        throw new Error(
+          `Failed to generate embeddings: ${embedding_res.status} ${embedding_res.statusText}`
+        );
+      }
+
+      const embeddingData = await embedding_res.json();
+      console.log("✅ Embedding Data:", embeddingData);
+
+      const apiResponse = await fetch("/api/internship", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          embeddings: embeddingData.embedding,
+          internship_id: fb_res.id,
+        }),
+      });
+
+      if (!apiResponse.ok) {
+        const errText = await apiResponse.text();
+        throw new Error(
+          `Failed to store embeddings: ${apiResponse.status} ${errText}`
+        );
+      }
+
+      const apiResult = await apiResponse.json();
+      if (!apiResult.success) {
+        throw new Error(`Failed to store embeddings: ${apiResult.error}`);
+      }
+
+      setStatus("Generated successfully ✅");
+      toast.success("Internship data updated successfully");
+    } catch (error) {
+      console.error("Error in handleUpload:", error);
+      setError(`Error: ${error.message}`);
+      setStatus("Failed ❌");
     } finally {
       setIsLoading(false);
     }

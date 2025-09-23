@@ -9,4 +9,8 @@ export const insertInternship = async ({ internshipData }) => {
     ...internshipData,
     createdAt: Timestamp.now(),
   });
+  return {
+    msg:true,
+    id:uid
+  }
 };

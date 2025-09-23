@@ -17,7 +17,7 @@ const Dashboard = () => {
     (async () => {
       setIsLoading(true);
       try {
-        const res = JSON.parse(await getResume({ uid: user?.uid }));
+        const res = await getResume({ uid: user?.uid });
         
         setResumeData(res);
         console.log(JSON.stringify(res));
