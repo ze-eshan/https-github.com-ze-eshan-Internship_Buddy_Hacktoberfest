@@ -6,6 +6,8 @@ import { insertUserResume } from "@/firebase/users/write";
 import { generateDigitalResume } from "@/model/resumeExtractorModel";
 import { Loader, Settings, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { generateDigitalInternship } from "@/model/intershipExtractorModel";
+import { insertInternship } from "@/firebase/internship/write";
 // import { Button } from "../ui/button";
 
 export default function ResumeUploader() {
@@ -103,15 +105,15 @@ export default function ResumeUploader() {
         console.log("✅ CLEAN JSON Object:", embeddingData);
         console.log("📝 Text:", embeddingData.text);
         console.log("📏 Dimension:", embeddingData.dimension);
-        console.log("🔢 First 5 values:", embeddingData.embedding.slice(0, 5));
+        console.log("🔢 First 5 values:", embeddingData.embedding);
         // const embedings = await embeidng_res.json()
         // console.log(embedings)
-        // setStatus("Generating Digital Profile...");
-        // const userResume = await generateDigitalResume(textResume);
-        // console.log(userResume);
-        // console.log(typeof userResume);
-        // await insertUserResume({ uid: user?.uid, data: userResume });
-        // toast.success("User Profile Generated Successfully");
+        setStatus("Generating Digital intership...");
+        const digitalInternship = await generateDigitalInternship(textInternship);
+        const internshipData = JSON.parse(digitalInternship)
+        console.log(JSON.parse(digitalInternship));
+        await insertInternship({internshipData:internshipData})
+        toast.success("internship data updated sucessfully");
         setStatus("Generated Successfully ✅");
       } catch (error) {
         setError(`error::${error?.message}`);
