@@ -6,6 +6,7 @@ NEXT_PUBLIC_FIREBASE_MSG_ID=<firebase_message_id>
 NEXT_PUBLIC_FIREBASE_APP_ID=<firebase_app_id>
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=<firebase_measurement_id>
 NEXT_PUBLIC_GEMINI_API_KEY=<Gemini-api-key>
+NEXT_PUBLIC_PINECONE_API_KEY=<api_key>
 
 
 env name :- .env.local

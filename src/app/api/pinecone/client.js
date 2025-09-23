@@ -6,6 +6,6 @@ const pc = new Pinecone({
 
 
 
-const pc_index = pc.index("sih-internship-embedings"); 
+const pc_index = pc.index(process.env.NEXT_PUBLIC_PINECONE_INDEX_NAME); 
 
 export default pc_index;
