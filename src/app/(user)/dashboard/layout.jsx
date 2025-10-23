@@ -60,6 +60,30 @@ const DashboardLayout = ({ children }) => {
       label: "Dashboard",
       icon: Users,
     },
+    {
+      link: "/dashboard/upload-resume",
+      id: "UploadResume",
+      label: "Upload Resume",
+      icon: Cloud,
+    },
+    {
+      link: "/dashboard/upload-internships",
+      id: "UploadInternships",
+      label: "Upload Internships",
+      icon: HardDriveUpload,
+    },
+    {
+      link: "/dashboard/internship-suggestions",
+      id: "internshipSuggestions",
+      label: "Internships Suggestions",
+      icon: BrainCircuitIcon,
+    },
+    {
+      link: "/dashboard/chatbot",
+      id: "chatbot",
+      label: "Chatbot",
+      icon: Brain,
+    },
   ];
 
   // Function to determine if a menu item is active based on current path
